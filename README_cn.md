@@ -12,7 +12,7 @@
 
    1. 在终端中打开 /var/lib/redis，找到 appendonly.aof
 
-   2. 执行 sudo redis-aof-check --fix appendonly.aof，修复 AOF 文件
+   2. 执行 sudo redis-check-aof --fix appendonly.aof，修复 AOF 文件
 
    3. 执行 sudo service redis-server restart，用以重启 redis 的后台服务进程
 

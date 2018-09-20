@@ -12,7 +12,7 @@
 
    1. Go to /var/lib/redis in terminal, find "appendonly.aof"
 
-   2. Execute "sudo redis-aof-check --fix appendonly.aof" to fix the AOF file
+   2. Execute "sudo redis-check-aof --fix appendonly.aof" to fix the AOF file
 
    3. Execute "sudo service redis-server restart" to restart redis background service
 
