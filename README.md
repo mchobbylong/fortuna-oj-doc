@@ -16,9 +16,11 @@
 
    3. Execute "sudo service redis-server restart" to restart redis background service
 
-   4. Kill and restart php to reset the submission queue if necessary
+   4. Kill php and restart yaujpushd service to reset the submission queue if necessary
 
-      
+      - sudo killall php
+      - sudo service yaujpushd start
+      - Rejudge all submissions that are pending to be judged in the webpage
 
 2. Some of the submissions are being judged, but way slower than usual.
 

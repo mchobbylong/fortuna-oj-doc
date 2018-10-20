@@ -16,9 +16,11 @@
 
    3. 执行 sudo service redis-server restart，用以重启 redis 的后台服务进程
 
-   4. 杀掉并重新运行 php 来重启代码提交队列（当然重启一次服务器是更好的选择）
+   4. 杀掉 php 并重新运行 yaujpushd 推送队列服务，以重启代码提交队列（当然重启一次服务器是更好的选择）
 
-      
+      - sudo killall php
+      - sudo service yaujpushd start
+      - 在管理页面中，对所有待评测任务提交重测请求
 
 2. 某些提交一直处于 “运行中” 的状态，评测非常缓慢甚至卡住
 
