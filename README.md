@@ -6,20 +6,20 @@
 
    fortuna-oj uses [redis](https://github.com/antirez/redis) to handle with session data (and submissions). Usually problem occurs because the **AOF file of redis is corrupted**, due to accidental reboots of the web server.
 
-   To identify this problem, please check redis log (usually in /var/log/redis/redis-server.log).
+   To identify this problem, please check redis log (usually in `/var/log/redis/redis-server.log`).
 
    To solve this:
 
-   1. Go to /var/lib/redis in terminal, find "appendonly.aof"
+   1. Go to `/var/lib/redis` in terminal, find "appendonly.aof"
 
-   2. Execute "sudo redis-check-aof --fix appendonly.aof" to fix the AOF file
+   2. Execute `sudo redis-check-aof --fix appendonly.aof` to fix the AOF file
 
-   3. Execute "sudo service redis-server restart" to restart redis background service
+   3. Execute `sudo service redis-server restart` to restart redis background service
 
    4. Kill php and restart yaujpushd service to reset the submission queue if necessary
 
-      - sudo killall php
-      - sudo service yaujpushd start
+      - `sudo killall php`
+      - `sudo service yaujpushd start`
       - Rejudge all submissions that are pending to be judged in the webpage
 
 2. Some of the submissions are being judged, but way slower than usual.

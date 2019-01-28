@@ -6,20 +6,20 @@
 
    Fortuna OJ 使用 [redis](https://github.com/antirez/redis) 来存储用户交互凭据（以及代码提交的队列）。而这个问题的出现，通常是因为 **redis 的 AOF 文件在服务器意外断电重启时，遭受损坏**。
 
-   如果要确认是否是这个原因，可以查看 redis 的日志（通常在 /var/log/redis/redis-server.log）。
+   如果要确认是否是这个原因，可以查看 redis 的日志（通常在 `/var/log/redis/redis-server.log`）。
 
    解决步骤：
 
-   1. 在终端中打开 /var/lib/redis，找到 appendonly.aof
+   1. 在终端中打开 `/var/lib/redis`，找到 appendonly.aof
 
-   2. 执行 sudo redis-check-aof --fix appendonly.aof，修复 AOF 文件
+   2. 执行 `sudo redis-check-aof --fix appendonly.aof`，修复 AOF 文件
 
-   3. 执行 sudo service redis-server restart，用以重启 redis 的后台服务进程
+   3. 执行 `sudo service redis-server restart`，用以重启 redis 的后台服务进程
 
    4. 杀掉 php 并重新运行 yaujpushd 推送队列服务，以重启代码提交队列（当然重启一次服务器是更好的选择）
 
-      - sudo killall php
-      - sudo service yaujpushd start
+      - `sudo killall php`
+      - `sudo service yaujpushd start`
       - 在管理页面中，对所有待评测任务提交重测请求
 
 2. 某些提交一直处于 “运行中” 的状态，评测非常缓慢甚至卡住
