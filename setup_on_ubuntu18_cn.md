@@ -28,6 +28,7 @@
 
    ```sh
    sudo apt-get install -y mariadb-server
+   sudo service mariadb restart
    ```
 
 5. 安装 redis
@@ -43,6 +44,7 @@
    sudo add-apt-repository ppa:ondrej/php
    sudo apt-get update
    sudo apt-get install -y php7.2-fpm php7.2-mysql php7.2-curl php7.2-gd php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-zip php7.2-opcache php7.2-redis
+   sudo service php7.2-fpm restart
    ```
 
 7. 配置 redis 监听 Unix Socket
@@ -86,4 +88,45 @@
    sudo mysql < /var/www/foj/migrate/full.sql
    ```
 
-3. TBD
+3. 根据第 2 步的数据库相关信息，修改 fortuna-oj 配置文件
+
+   ```sh
+   cd /var/www/foj/overriding_config
+   sudo -u www-data cp local.php.example local.php
+   sudo -u www-data ./gen_secret.py
+   ```
+
+   ```php
+   # /var/www/foj/overriding_config/local.php
+   
+   $db['default']['database'] = 'foj';
+   ```
+
+4. 配置 nginx 网站配置
+
+   ```nginx
+   # /etc/nginx/sites-enabled/foj.conf
+   
+   server {
+       listen 80;
+       listen [::]:80;
+       
+       root /var/www/foj;
+       index index.html index.php;
+       
+       location / {
+           try_files $uri $uri/ /index.php;
+       }
+       
+       location ~* \.php$ {
+           fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+           include fastcgi.conf;
+       }
+   }
+   ```
+
+   ```sh
+   sudo service nginx reload
+   ```
+
+5. 
