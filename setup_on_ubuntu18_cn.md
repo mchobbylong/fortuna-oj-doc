@@ -2,6 +2,8 @@
 
 以下指南将在纯净的 Ubuntu 18.04.1 LTS 操作系统上部署 fortuna-oj。
 
+PS：Fortuna OJ 现已[开源](https://github.com/roastduck/fortuna-oj)，部署请暂时使用 [new-env](https://github.com/roastduck/fortuna-oj/tree/new-env) 分支
+
 
 
 ## 配置环境
@@ -129,4 +131,12 @@
    sudo service nginx reload
    ```
 
-5. 
+配置结束。
+
+
+
+## 已知问题
+
+### Bug
+
+- 【重要】创建第一个用户后无法登录，提示密码验证不通过
