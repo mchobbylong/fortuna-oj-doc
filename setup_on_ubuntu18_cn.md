@@ -141,4 +141,5 @@ PS：Fortuna OJ 现已[开源](https://github.com/roastduck/fortuna-oj)，部署
 
 ### Bug
 
-- 【重要】创建第一个用户后无法登录，提示密码验证不通过
+- 登录后 push 有几率返回 HTTP 504
+- log 中显示无法给 session 上锁（obtain lock）
