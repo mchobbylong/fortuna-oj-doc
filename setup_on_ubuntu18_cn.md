@@ -100,7 +100,9 @@ PS：Fortuna OJ 现已[开源](https://github.com/roastduck/fortuna-oj)，部署
 
    ```php
    # /var/www/foj/overriding_config/local.php
+   # cookie_path 与 nginx 配置中的 root 有关，注意修改
    
+   $assign_to_config['cookie_path'] = '/';
    $db['default']['database'] = 'foj';
    ```
 
