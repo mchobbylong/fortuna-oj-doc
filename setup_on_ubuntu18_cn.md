@@ -73,7 +73,7 @@ PS：Fortuna OJ 现已[开源](https://github.com/roastduck/fortuna-oj)，部署
    cd /var/www
    sudo mkdir foj
    sudo chown www-data:www-data foj
-   sudo -u www-data git clone https://github.com/mchobbylong/fortuna-oj foj
+   sudo -u www-data git clone https://github.com/roastduck/fortuna-oj foj
    cd foj
    sudo -u www-data git checkout new-env
    ```
