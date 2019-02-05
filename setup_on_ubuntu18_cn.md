@@ -71,7 +71,13 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
    sudo service redis-server restart
    ```
 
-8. 重启操作系统以应用变更（用户组变更）
+8. 配置 MariaDB 最大并发连接数
+
+   ```sh
+   echo "echo \"\n[mysqld]\nmax_connections = 32768\" >> /etc/mysql/my.cnf" | sudo sh
+   ```
+
+9. 重启操作系统以应用变更（用户组变更）
 
 ## 部署 fortuna-oj
 
