@@ -158,6 +158,15 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
    sudo service nginx reload
    ```
 
+5. 配置服务和自启动 Daemon
+
+   ```sh
+   sudo crontab -e -u www-data
+   
+   # 编辑器中插入
+   */1 * * * * php /var/www/foj/application/daemon.php
+   ```
+
 配置结束。
 
 ## 已知问题
