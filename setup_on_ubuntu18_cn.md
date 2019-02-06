@@ -1,10 +1,10 @@
 # Fortuna OJ 部署指南
 
-以下指南将在纯净的 Ubuntu 18.04.1 LTS 操作系统上部署 fortuna-oj。
+以下指南将在**纯净的 Ubuntu 18.04.1 LTS 操作系统**上部署 fortuna-oj。
 
-PS：Fortuna OJ 现已[开源](https://github.com/roastduck/fortuna-oj)，部署请暂时使用 [new-env](https://github.com/roastduck/fortuna-oj/tree/new-env) 分支
+PS：fortuna-oj 现已[开源](https://github.com/roastduck/fortuna-oj)，部署请暂时使用 [new-env](https://github.com/roastduck/fortuna-oj/tree/new-env) 分支
 
-## 使用自动化脚本
+## 使用自动化脚本（推荐）
 
 使用脚本后无需再进行下述手动部署操作。
 
@@ -16,13 +16,9 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
 
 ## 配置环境
 
-1. 更换 apt 源为清华 Tuna（可选）
+1. [更换 apt 源为清华 Tuna（可选）](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 
-   ```sh
-   # TDB
-   ```
-
-2. 安装相关依赖
+2. 安装 Git
 
    ```sh
    sudo apt install -y git
@@ -38,7 +34,6 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
 
    ```sh
    sudo apt install -y mariadb-server
-   sudo service mariadb restart
    ```
 
 5. 安装 redis
@@ -74,7 +69,12 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
 8. 配置 MariaDB 最大并发连接数
 
    ```sh
-   echo "echo \"\n[mysqld]\nmax_connections = 32768\" >> /etc/mysql/my.cnf" | sudo sh
+   # 以 root 权限编辑
+   # /etc/mysql/mariadb.conf.d/50-server.cnf
+   # 找到 max_connections 行，去除注释符号并作修改
+   max_connections = 32768
+
+   sudo service mariadb restart
    ```
 
 9. 重启操作系统以应用变更（用户组变更）
@@ -115,13 +115,34 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
    ```php
    # 以 www-data 权限编辑
    # /var/www/foj/overriding_config/local.php
-   # cookie_path 与下面 nginx 配置中的 "root" 行有关，注意修改
    
-   $assign_to_config['cookie_path'] = '/';
+   $assign_to_config['cookie_path'] = '/foj';
+   $assign_to_config['oj_name'] = 'foj';
+
+   # 此处根据第 2 步设置的数据库名修改
    $db['default']['database'] = 'foj';
    ```
 
-4. 配置 nginx 网站配置
+4. 配置服务和自启动 Daemon
+
+   ```sh
+   cd /var/www/foj/application
+   sudo -u www-data cp daemon.php.example daemon.php
+
+   # 以 www-data 权限编辑
+   # /var/www/foj/application/daemon.php
+   # 替换其中的 {{db_user}}, {{db_pwd}}, {{db_name}}
+   # 为第 2 步的对应设置
+   ```
+
+   ```sh
+   sudo crontab -e -u www-data
+   
+   # 编辑器中插入
+   */1 * * * * php /var/www/foj/application/daemon.php
+   ```
+
+5. 配置 nginx 网站配置
 
    ```sh
    sudo rm /etc/nginx/sites-enabled/default
@@ -137,10 +158,7 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
        
        # server_name foj.com;	# 替换成自己的域名，也可以不填
        
-       # 此项配置与上方 cookie_path 有关。
-       # 若希望访问网址没有 /foj 后缀，请保持此处的默认设置
-       # 否则将下方改为 root /var/www; 并修改 cookie_path 为 '/foj'
-       root /var/www/foj;
+       root /var/www;
 
        index index.html index.php;
        
@@ -148,9 +166,16 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
            expires max;
            log_not_found off;
        }
-       
+
        location / {
-           try_files $uri $uri/ /index.php;
+           if ($request_uri = "/") {
+               return 301 /foj;
+           }
+           return 403;
+       }
+       
+       location /foj {
+           try_files $uri $uri/ /foj/index.php;
        }
        
        location ~* \.php$ {
@@ -162,15 +187,6 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
 
    ```sh
    sudo service nginx reload
-   ```
-
-5. 配置服务和自启动 Daemon
-
-   ```sh
-   sudo crontab -e -u www-data
-   
-   # 编辑器中插入
-   */1 * * * * php /var/www/foj/application/daemon.php
    ```
 
 配置结束。
