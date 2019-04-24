@@ -2,7 +2,7 @@
 
 以下指南将在**纯净的 Ubuntu 18.04.1 LTS 操作系统**上部署 fortuna-oj。
 
-PS：fortuna-oj 现已[开源](https://github.com/roastduck/fortuna-oj)，部署请暂时使用 [new-env](https://github.com/roastduck/fortuna-oj/tree/new-env) 分支
+PS：fortuna-oj 现已[开源](https://github.com/roastduck/fortuna-oj)。若无特殊需要，部署时请使用 master 分支。
 
 ## 使用自动化脚本（推荐）
 
@@ -11,7 +11,7 @@ PS：fortuna-oj 现已[开源](https://github.com/roastduck/fortuna-oj)，部署
 请根据脚本提示输入，完成配置。
 
 ```sh
-wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/install.py && sudo python3 install.py
+wget https://raw.githubusercontent.com/roastduck/fortuna-oj/master/scripts/install.py && sudo python3 install.py
 ```
 
 ## 配置环境
@@ -87,7 +87,7 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
    cd /var/www
    sudo mkdir foj
    sudo chown www-data:www-data foj
-   sudo -u www-data git clone -b new-env https://github.com/roastduck/fortuna-oj foj
+   sudo -u www-data git clone -b master https://github.com/roastduck/fortuna-oj foj
    ```
 
 2. 导入相关数据库
@@ -169,7 +169,7 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
 
        location / {
            if ($request_uri = "/") {
-               return 301 /foj;
+               return 302 /foj;
            }
            return 403;
        }
@@ -190,10 +190,3 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/new-env/scripts/inst
    ```
 
 配置结束。
-
-## 已知问题
-
-### Bug
-
-- 登录后 push 有几率返回 HTTP 504
-- log 中显示无法给 session 上锁（obtain lock）
