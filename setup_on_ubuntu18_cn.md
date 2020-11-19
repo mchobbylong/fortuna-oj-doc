@@ -2,7 +2,7 @@
 
 以下指南将在**纯净的 Ubuntu 18.04.1 LTS 操作系统**上部署 fortuna-oj。
 
-PS：fortuna-oj 现已[开源](https://github.com/roastduck/fortuna-oj)。若无特殊需要，部署时请使用 master 分支。
+*PS：fortuna-oj 已~~凄惨~~闭源。本文档留给维护者参照使用。*
 
 ## 使用自动化脚本（推荐）
 
@@ -139,7 +139,7 @@ wget https://raw.githubusercontent.com/roastduck/fortuna-oj/master/scripts/insta
    sudo crontab -e -u www-data
    
    # 编辑器中插入
-   */1 * * * * php /var/www/foj/application/daemon.php
+   */1 * * * * curl http://127.0.0.1/foj/misc/daemon > null
    ```
 
 5. 配置 nginx 网站配置
